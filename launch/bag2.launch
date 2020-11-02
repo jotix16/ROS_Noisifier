@@ -1,0 +1,20 @@
+<!-- Launch file for test_ekf_localization_node_bag1 -->
+
+<!-- In this run, we ran a Clearpath Husky with a slightly broken Microstrain 3DM-GX2 IMU
+     around a parking lot. The IMU was intentionally rotated +90 degrees about the X axis,
+     then rotated (extrinsically) -90 degrees about the Z axis. -->
+
+<launch>
+    <!-- <param name="/use_sim_time" value="true" /> -->
+
+  <node type="rviz" name="rviz" pkg="rviz" args="-d /home/mzhobro/evaluation/src/config_file.rviz" />
+  <node pkg="rosbag" type="play" name="rosbagplay" args="/home/mzhobro/filter_ws/src/localizationfusionlibrary/test/test2.bag" required="true" output="screen"/>
+  <node pkg="noisy" type="noisier.py" name="noisier" required="true" output="screen">
+    <param name="odom" value="/jackal_velocity_controller/odom"/>
+    <param name="imu" value="/imu/data"/>
+    <param name="odom_noised" value="odometry/noised"/>
+  </node>
+
+  <node pkg="rosbag" type="record" name="recorder" output="screen" args="-O bag1_noise /jackal_velocity_controller/odom /imu/data odometry/noised"/>
+
+</launch>
