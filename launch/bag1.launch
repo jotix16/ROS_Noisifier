@@ -9,13 +9,13 @@
 
   <node type="rviz" name="rviz" pkg="rviz" args="-d /home/mzhobro/evaluation/src/config_file.rviz" />
   <node pkg="rosbag" type="play" name="rosbagplay" args="/home/mzhobro/filter_ws/src/localizationfusionlibrary/test/test1.bag" required="true" output="screen"/>
-  <node pkg="noisy" type="noisier.py" name="noisier" required="true" output="screen">
+  <!-- <node pkg="noisy" type="noisier.py" name="noisier" required="true" output="screen">
     <param name="odom" value="/husky_velocity_controller/odom"/>
     <param name="imu" value="/imu/data"/>
     <param name="odom_noised" value="odometry/noised"/>
   </node>
 
 
-  <node pkg="rosbag" type="record" name="recorder" output="screen" args="-O bag1_noise /husky_velocity_controller/odom /imu/data odometry/noised"/>
+  <node pkg="rosbag" type="record" name="recorder" output="screen" args="-O bag1_noise /husky_velocity_controller/odom /imu/data odometry/noised"/> -->
 
 </launch>

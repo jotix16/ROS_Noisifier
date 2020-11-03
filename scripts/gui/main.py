@@ -19,8 +19,8 @@ PATHS = [
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
-        self.not_launched = True
         super(MainWindow, self).__init__()
+        self.not_launched = True
         self.setupUi(self)
         self.interactions()
         self.variance = [0]*12
@@ -30,27 +30,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bag_path = None
 
     def interactions(self):
-        '''
-            Set up the connectivity between all the GUI elements that where generated in
-            the layout.py file.
-        '''
+        ''' Set up the connectivity between all the GUI elements that where generated in the layout.py file.'''
         # Button to launch the rosnodes
         self.Browse.clicked.connect(self.on_click_browse)
         self.Launch.clicked.connect(self.on_click_launch)
 
         # Lambda was used here to demonstrate how a second argument can be passed to the handler function
-        self.variance_x.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.x, [0]))
-        self.variance_y.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.y, [1]))
-        self.variance_z.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.z, [2]))
-        self.variance_roll.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.roll, [3]))
-        self.variance_pitch.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.pitch, [4]))
-        self.variance_yaw.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.yaw, [5]))
-        self.variance_linear_vel.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.lin_vel, [6,7,8]))
-        self.variance_angular_vel.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val, self.angular, [9,10,11]))
-        # self.variance_x.sliderReleased.connect(self.slider_released_handler)
+        self.variance_x.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.02, self.x, [0]))
+        self.variance_y.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.02, self.y, [1]))
+        self.variance_z.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.02, self.z, [2]))
+        self.variance_roll.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.01, self.roll, [3]))
+        self.variance_pitch.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.01, self.pitch, [4]))
+        self.variance_yaw.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.01, self.yaw, [5]))
+        self.variance_linear_vel.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.01, self.lin_vel, [6,7,8]))
+        self.variance_angular_vel.sliderMoved.connect(lambda val, dummy=None: self.slider_moved_handler(val*0.01, self.angular, [9,10,11]))
 
         # radio buttons
         self.buttonGroup.buttonClicked[int].connect(self.on_radio_button_clicked)
+
+    def slider_moved_handler(self, val, label, index):
+        '''This function runs whenever the value of the slider moves'''
+        label.setText(str(val))
+        for ix in index:
+            self.variance[ix] = val
+        msg = Float64MultiArray()
+        msg.data = [i for i in self.variance]
+        self.set_covariance_pub.publish(msg)
 
     def on_radio_button_clicked(self, id):
         switcher = {
@@ -58,21 +63,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 "bag2": 1, # bag2
                 "bag3": 2, # bag3
             }
-
         self.bag_index = switcher.get(self.buttonGroup.checkedButton().text(), None)
-        print("BAAAAAAAAAAAG", " -> ", self.bag_index, self.buttonGroup.checkedButton().text())
-
-    def slider_moved_handler(self, val, label, index):
-        '''
-            Takes the slider value and a dummy value and sets the label of the variance in the interface
-            (This function runs whenever the value of the slider moves)
-        '''
-        val_new =  val * 0.02
-        for ix in index:
-            self.variance[ix] = val_new
-        msg = Float64MultiArray()
-        msg.data = [i for i in self.variance]
-        self.set_covariance_pub.publish(msg)
 
     def on_click_browse(self):
         options = QtWidgets.QFileDialog.Options()
@@ -100,6 +91,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print(bag_name)
         cmd = "source /home/mzhobro/evaluation/devel/setup.bash; roslaunch {}; mv ~/.ros/bag1_noise.bag ~/evaluation/noised_bags/{}.bag".format(self.bag_path, bag_name)
         check_call( cmd, shell=True, executable="/bin/bash")
+
 
 def Window():
     app = QApplication(sys.argv)
