@@ -1,0 +1,5 @@
+.pyc
+.spec
+.vscode
+__pycache__
+.bag
