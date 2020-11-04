@@ -46,10 +46,8 @@ class Noisier():
                 data.pose.pose.orientation.z,
                 data.pose.pose.orientation.w]
         rpy = euler_from_quaternion(quat,'szyx')
-        print("quat1", quat)
         rpy += noise[3:6]*0.2
         quat = quaternion_from_euler(rpy[0], rpy[1], rpy[2], 'rzyx')
-        print("quat2", quat)
         data.pose.pose.orientation.x = quat[0]
         data.pose.pose.orientation.y = quat[1]
         data.pose.pose.orientation.z = quat[2]
