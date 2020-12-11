@@ -9,8 +9,8 @@ cd ros_noisifier
 python scripts/gui/main2.py
 ```
 Firstly choose the bag, nr of noised paths and topic you want to noisify:
-![](images/1.PNG)
+![](./Images/1.PNG)
 
 
 Than dynamically add noise to the paths
-![](images/2.PNG)
+![](./Images/2.PNG)
