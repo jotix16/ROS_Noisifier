@@ -59,3 +59,6 @@ This will auto-generate all interface elements in Python code. The class it crea
 ## Launching the code
 
 Simply run `main.py`. All the logic happens in that file.
+```bash
+python main2.py
+```
