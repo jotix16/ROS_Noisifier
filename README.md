@@ -2,7 +2,7 @@
 
 GUI create several noised paths from one path(i.e. add noise to odom topics)
 
-
+```
 git clone https://gitlab.iavgroup.local/mzhobro/ros_noisifier.git
 cd ros_noisifier
 # run with
