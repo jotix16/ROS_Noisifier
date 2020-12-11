@@ -54,11 +54,11 @@ Once all the changes are saved, run the following command
 pyuic5 -x layout.ui -o layout.py
 ```
 
-This will auto-generate all interface elements in Python code. The class it creates, `Ui_MainWindow` , is then imported and inherited by the main class in `main.py`
+This will auto-generate all interface elements in Python code. The class it creates, `Ui_MainWindow` , is then imported and inherited by the main class in `main2.py`
 
 ## Launching the code
 
-Simply run `main.py`. All the logic happens in that file.
+Simply run `main2.py`. All the logic happens in that file.
 ```bash
 python main2.py
 ```
