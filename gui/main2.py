@@ -18,9 +18,9 @@ from std_msgs.msg import Float64MultiArray
 from launcher import record_bag, play_bag, start_noisy_node, list_of_odometry_topics, start_roscore
 
 PATHS = [
-    "/home/mzhobro/filter_ws/src/localizationfusionlibrary/test/test1.bag",
-    "/home/mzhobro/filter_ws/src/localizationfusionlibrary/test/test2.bag",
-    "/home/mzhobro/filter_ws/src/localizationfusionlibrary/test/test3.bag"
+    os.path.dirname(os.path.realpath(__file__))+ "/../" + "test1.bag",
+    os.path.dirname(os.path.realpath(__file__))+ "/../" + "test2.bag",
+    os.path.dirname(os.path.realpath(__file__))+ "/../" + "test3.bag"
 ]
 
 class MainWindow(QtWidgets.QMainWindow,QtWidgets.QWidget, Ui_MainWindow):

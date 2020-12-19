@@ -24,11 +24,8 @@ def start_noisy_node(odom, odom_noised, set_variance):
     """
     Does work as well from service/topic callbacks directly using rosrun
     """
-    package = 'noisy'
     node_name = 'noisier.py'
-    command = "rosrun {0} {1} _odom:={2} _odom_noised:={3} _set_variance:={4}".format(package, node_name, odom, odom_noised, set_variance)
-    # command = "rosrun {0} {1} _odom:={2} _imu:={3} _odom_noised:={4} _set_variance:={5}".format(package, node_name, odom, imu, odom_noised, set_variance)
-
+    command = " python {0} {1} {2} {3}".format(os.path.dirname(os.path.realpath(__file__))+"/"+node_name, odom, odom_noised, set_variance)
     p = subprocess.Popen(command, preexec_fn=os.setsid, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
 
     state = p.poll()

@@ -9,18 +9,22 @@ from std_msgs.msg import Float64MultiArray
 from tf.transformations import quaternion_from_euler, quaternion_multiply, euler_from_quaternion
 
 class Noisier():
-    def __init__(self):
+    def __init__(self, args):
         self.means = np.zeros(12)
         self.variances = np.zeros(12)
-        self.initialize()
+        self.initialize(args)
 
-    def initialize(self):
+    def initialize(self, args):
         ## ROS NODE
         rospy.init_node('noisier', anonymous=True)
-        odom_topic = rospy.get_param('~odom', "eha")
-        # imu_topic_list = rospy.get_param('~imu', [])
-        odom_noised_topic = rospy.get_param('~odom_noised', "")
-        set_variance_service = rospy.get_param('~set_variance', "set_variance")
+        if args.odom_topic:
+            odom_topic = args.odom_topic
+        if args.odom_topic_noised:
+            odom_noised_topic = args.odom_topic_noised
+        if args.set_variance:
+            set_variance_service = args.set_variance
+        else:
+            set_variance_service = "set_variance"
         rospy.loginfo("PARAMS: "+ odom_topic + ", " + odom_noised_topic)
 
         rospy.Subscriber(odom_topic, Odometry, self.callback_odom)
@@ -81,5 +85,12 @@ class Noisier():
 
 
 if __name__ == '__main__':
-    myno = Noisier()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('odom_topic', help='topic to be noisified')
+    parser.add_argument('odom_topic_noised', help='output topic after noisified')
+    parser.add_argument('set_variance', help='set_variance')
+    args = parser.parse_args()
+
+    myno = Noisier(args)
     myno.initialize()
